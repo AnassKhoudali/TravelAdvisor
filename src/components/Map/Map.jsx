@@ -8,7 +8,6 @@ import useStyles from './styles';
 export default function Map(props) {
   const classes = useStyles();
   const isDesktop = useMediaQuery('(min-width:600px)');
-  const coordinates = { lat: 0, lng: 0 };
 
   return (
     <div className={classes.mapContainer}>
@@ -18,7 +17,7 @@ export default function Map(props) {
         center={props.coordinates}
         defaultZoom={14}
         margin={[50, 50, 50, 50]}
-        options={''}
+        // options={{ disableDefaultUI: true, zoomControl: true, styles: '' }}
         onChange={(e) => {
           props.setCoordinates({ lat: e.center.lat, lng: e.center.lng });
           props.setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
