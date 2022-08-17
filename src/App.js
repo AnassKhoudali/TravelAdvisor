@@ -15,6 +15,7 @@ export default function App() {
   const [type, setType] = useState('restaurants');
   const [rating, setRating] = useState('');
   const [filteredPlaces, setFilteredPlaces] = useState([]);
+  const [weatherData, setWeatherData] = useState([]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -30,14 +31,20 @@ export default function App() {
   }, [rating]);
 
   useEffect(() => {
-    setIsLoading(true);
-    getPlacesData(type, bounds.sw, bounds.ne).then((data) => {
-      console.log(data);
-      setPlaces(data);
-      setFilteredPlaces([]);
-      setIsLoading(false);
-    });
-  }, [coordinates, bounds, type]);
+    if (bounds.sw && bounds.ne) {
+      setIsLoading(true);
+      //TO DO: getting the current weather data and displaying it to the user
+      // getWeatherData(coordinates.lat, coordinates.lng)
+      //   .then((data) => setWeatherData(data))
+      //   .then(() => console.log(' weather data' + weatherData));
+      getPlacesData(type, bounds.sw, bounds.ne).then((data) => {
+        console.log(data);
+        setPlaces(data?.filter((place) => place.name && place.num_reviews > 0));
+        setFilteredPlaces([]);
+        setIsLoading(false);
+      });
+    }
+  }, [bounds, type]);
   return (
     <>
       <CssBaseline />
@@ -61,6 +68,7 @@ export default function App() {
             coordinates={coordinates}
             places={filteredPlaces.length ? filteredPlaces : places}
             setChildClicked={setChiledClicked}
+            weatherData={weatherData}
           />
         </Grid>
       </Grid>

@@ -4,6 +4,7 @@ import { Paper, Typography, useMediaQuery } from '@material-ui/core';
 import LocationOnOutlinedIcon from '@material-ui/icons/LocationOnOutlined';
 import Rating from '@material-ui/lab/Rating';
 import useStyles from './styles';
+import mapStyles from './mapStyles';
 
 export default function Map(props) {
   const classes = useStyles();
@@ -12,12 +13,16 @@ export default function Map(props) {
   return (
     <div className={classes.mapContainer}>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: 'AIzaSyBXMom3ZhzrRpcCOF8Kto_mBqXdGotiME8' }}
+        bootstrapURLKeys={{ key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY }}
         defaultCenter={props.coordinates}
         center={props.coordinates}
         defaultZoom={14}
         margin={[50, 50, 50, 50]}
-        // options={{ disableDefaultUI: true, zoomControl: true, styles: '' }}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: true,
+          styles: mapStyles,
+        }}
         onChange={(e) => {
           props.setCoordinates({ lat: e.center.lat, lng: e.center.lng });
           props.setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
@@ -54,6 +59,14 @@ export default function Map(props) {
                 <Rating size="small" value={Number(place.rating)} readOnly />
               </Paper>
             )}
+          </div>
+        ))}
+        {props.weatherData?.list?.map((data, i) => (
+          <div key={i} lat={data.coord.lat} lng={data.coord.lon}>
+            <img
+              src={`https://openweathermap.org/img/w/${data.weather[0].icon}.png`}
+              alt="con showing the current weather"
+            />
           </div>
         ))}
       </GoogleMapReact>
