@@ -11,26 +11,30 @@ import {
 import useStyles from './styles';
 import PlaceDetails from '../PlaceDetails/PlaceDetails';
 
-export default function List(props) {
+export default function List({
+  places,
+  childClicked,
+  isLoading,
+  rating,
+  setRating,
+  type,
+  setType,
+}) {
   const classes = useStyles();
-  const [type, setType] = useState('restaurants');
-  const [rating, setRating] = useState('');
   const [elRefs, setElRefs] = useState([]);
 
   useEffect(() => {
-    const refs = Array(props.places?.length)
+    const refs = Array(places?.length)
       .fill()
       .map((_, i) => elRefs[i] || createRef());
     setElRefs(refs);
-  }, [props.places]);
-
-  console.log('childCliked: ' + props.childClicked);
+  }, [places]);
   return (
     <div className={classes.container}>
       <Typography variant="h4">
         Restaurants, Hotels & Attractions around you
       </Typography>
-      {props.isLoading ? (
+      {isLoading ? (
         <div className={classes.loading}>
           <CircularProgress size="5rem" />
         </div>
@@ -41,7 +45,7 @@ export default function List(props) {
             <Select value={type} onChange={(e) => setType(e.target.value)}>
               <MenuItem value="restaurants">Restaurants</MenuItem>
               <MenuItem value="hotels">Hotels</MenuItem>
-              <MenuItem value="atractions">Attractions</MenuItem>
+              <MenuItem value="attractions">Attractions</MenuItem>
             </Select>
           </FormControl>
           <FormControl className={classes.fromControl}>
@@ -55,12 +59,13 @@ export default function List(props) {
           </FormControl>
 
           <Grid container spacing={3} className={classes.list}>
-            {props.places?.map((place, i) => (
+            {places?.map((place, i) => (
               <Grid item key={i} xs={12}>
                 <PlaceDetails
                   place={place}
-                  selected={Number(props.childClicked) === i}
+                  selected={Number(childClicked) === i}
                   refProp={elRefs[i]}
+                  type={type}
                 />
               </Grid>
             ))}

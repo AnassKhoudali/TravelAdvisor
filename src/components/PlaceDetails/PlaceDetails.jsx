@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Box,
   Typography,
@@ -15,11 +14,12 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import Rating from '@material-ui/lab/Rating';
 import useStyles from './styles';
 import { CallMissedSharp } from '@material-ui/icons';
-export default function PlaceDetails({ place, selected, refProp }) {
+export default function PlaceDetails({ place, selected, refProp, type }) {
   const classes = useStyles();
 
-  if (selected)
+  if (selected) {
     refProp?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
   return (
     <Card elevation={6}>
       <CardMedia
@@ -27,7 +27,11 @@ export default function PlaceDetails({ place, selected, refProp }) {
         image={
           place.photo
             ? place.photo.images.large.url
-            : 'https://portal.restomontreal.ca/le-marlow/logo/bigimage.jpg?v=4023'
+            : type === 'restaurants'
+            ? 'https://portal.restomontreal.ca/le-marlow/logo/bigimage.jpg?v=4023'
+            : type === 'attractions'
+            ? 'https://allytravels.com/wp-content/uploads/2020/11/Ottawa-800x618.jpg'
+            : 'https://s7d2.scene7.com/is/image/ritzcarlton/50556589-outside?$XlargeViewport100pct$'
         }
         title={place.name}
       />
